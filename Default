@@ -1,0 +1,136 @@
+void STEAMAPI_API 
+void $uint32
+LanguageForm.support-content-visit-id01735326318542-730655326891758399
+
+
+void	referenceSAXFunc		(void * ctx, 
+					 const xmlChar * name)
+void	processingInstructionSAXFunc	(void * ctx, 
+					 const xmlChar * target, 
+					 const xmlChar * data)
+void	notationDeclSAXFunc		(void * ctx, 
+					 const xmlChar * name, 
+					 const xmlChar * publicId, 
+					 const xmlChar * systemId)
+int	isStandaloneSAXFunc		(void * ctx)void	internalSubsetSAXFunc		(void * ctx, 
+					 const xmlChar * name, 
+					 const xmlChar * ExternalID, 
+					 const xmlChar * SystemID)
+void	ignorableWhitespaceSAXFunc	(void * ctx, 
+					 const xmlChar * ch, 
+					 int len)
+int	hasInternalSubsetSAXFunc	(void * ctx)
+int	hasExternalSubsetSAXFunc	(void * ctx)
+xmlEntityPtr	getParameterEntitySAXFunc	(void * ctx, 
+						 const xmlChar * name)
+
+xmlEntityPtr	getEntitySAXFunc	(void * ctx, 
+					 const xmlChar * name)void	fatalErrorSAXFunc		(void * ctx, 
+					 const char * msg, 
+					 ... ...)void	externalSubsetSAXFunc		(void * ctx, 
+					 const xmlChar * name, 
+					 const xmlChar * ExternalID, 
+					 const xmlChar * SystemID)
+
+void	errorSAXFunc			(void * ctx, 
+					 const char * msg, 
+					 ... ...)
+
+void	entityDeclSAXFunc		(void * ctx, 
+					 const xmlChar * name, 
+					 int type, 
+					 const xmlChar * publicId, 
+					 const xmlChar * systemId, 
+					 xmlChar * content)void	endElementSAXFunc		(void * ctx, 
+					 const xmlChar * name)
+
+void	endElementNsSAX2Func		(void * ctx, 
+					 const xmlChar * localname, 
+					 const xmlChar * prefix, 
+					 const xmlChar * URI)void	endDocumentSAXFunc		(void * ctx)
+
+void	elementDeclSAXFunc		(void * ctx, 
+					 const xmlChar * name, 
+					 int type, 
+					 xmlElementContentPtr content)
+
+void	commentSAXFunc			(void * ctx, 
+					 const xmlChar * value)
+
+void	charactersSAXFunc		(void * ctx, 
+					 const xmlChar * ch, 
+					 int len)
+
+void	cdataBlockSAXFunc		(void * ctx, 
+					 const xmlChar * value, 
+					 int len)
+
+void	attributeSAXFunc		(void * ctx, 
+					 const xmlChar * name, 
+					 const xmlChar * value)void	attributeDeclSAXFunc		(void * ctx, 
+					 const xmlChar * elem, 
+					 const xmlChar * fullname, 
+					 int type, 
+					 int def, 
+					 const xmlChar * defaultValue, 
+					 xmlEnumerationPtr tree)Other JBIG2 image decoding implementations include
+
+jbig2dec (http://jbig2dec.sourceforge.net/)
+xpdf (http://www.foolabs.com/xpdf/)
+The final draft JBIG2 specification can be found at http://www.jpeg.org/public/fcd14492.pdf
+    All three of the above resources were used in the writing of this software, with methodologies,
+
+<cfset parseroptions = structnew()> <cfset parseroptions.ALLOWEXTERNALENTITIES = false> <cfscript> a = XmlParse("xml.xml", false, parseroptions); writeDump(a); </cfscript>
+
+XxmlSearch(xmldoc, xpath,parseroptions); XmlTransform(xmldoc,xslt,parseroptions); isXML(xmldoc,parseroptions);
+
+= { externalGeneralEntities: false, secure: true, disallowDoctypeDecl: true };
+
+import javax.xml.parsers.DocumentBuilderFactory; import javax.xml.parsers.ParserConfigurationException; // catching unsupported features import javax.xml.XMLConstants; ... DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance(); String FEATURE = null; try { // This is the PRIMARY defense. If DTDs (doctypes) are disallowed, almost all // XML entity attacks are prevented // Xerces 2 only - http://xerces.apache.org/xerces2-j/features.html#disallow-doctype-decl FEATURE = "http://apache.org/xml/features/disallow-doctype-decl"; dbf.setFeature(FEATURE, true); // and these as well, per Timothy Morgan's 2014 paper: "XML Schema, DTD, and Entity Attacks" dbf.setXIncludeAware(false); // remaining parser logic ... } catch (ParserConfigurationException e) { // This should catch a failed setFeature feature // NOTE: Each call to setFeature() should be in its own try/catch otherwise subsequent calls will be skipped. // This is only important if you're ignoring errors for multi-provider support. logger.info("ParserConfigurationException was thrown. The feature '" + FEATURE + "' is not supported by your XML processor."); ... } catch (SAXException e) { // On Apache, this should be thrown when disallowing DOCTYPE logger.warning("A DOCTYPE was passed into the XML document"); ... } catch (IOException e) { // XXE that points to a file that doesn't exist logger.error("IOException occurred, XXE may still possible: " + e.getMessage()); ... } // Load XML file or stream using a XXE agnostic configured parser... DocumentBuilder safebuilder = dbf.newDocumentBuilder();
+
+import javax.xml.parsers.DocumentBuilderFactory; import javax.xml.parsers.ParserConfigurationException; // catching unsupported features import javax.xml.XMLConstants; ... DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance(); String[] featuresToDisable = { // Xerces 1 - http://xerces.apache.org/xerces-j/features.html#external-general-entities // Xerces 2 - http://xerces.apache.org/xerces2-j/features.html#external-general-entities // JDK7+ - http://xml.org/sax/features/external-general-entities //This feature has to be used together with the following one, otherwise it will not protect you from XXE for sure "http://xml.org/sax/features/external-general-entities", // Xerces 1 - http://xerces.apache.org/xerces-j/features.html#external-parameter-entities // Xerces 2 - http://xerces.apache.org/xerces2-j/features.html#external-parameter-entities // JDK7+ - http://xml.org/sax/features/external-parameter-entities //This feature has to be used together with the previous one, otherwise it will not protect you from XXE for sure "http://xml.org/sax/features/external-parameter-entities", // Disable external DTDs as well "http://apache.org/xml/features/nonvalidating/load-external-dtd" } for (String feature : featuresToDisable) { try { dbf.setFeature(FEATURE, false); } catch (ParserConfigurationException e) { // This should catch a failed setFeature feature logger.info("ParserConfigurationException was thrown. The feature '" + feature + "' is probably not supported by your XML processor."); ... } } try { // Add these as per Timothy Morgan's 2014 paper: "XML Schema, DTD, and Entity Attacks" dbf.setXIncludeAware(false); dbf.setExpandEntityReferences(false); // As stated in the documentation, "Feature for Secure Processing (FSP)" is the central mechanism that will // help you safeguard XML processing. It instructs XML processors, such as parsers, validators, // and transformers, to try and process XML securely, and the FSP can be used as an alternative to // dbf.setExpandEntityReferences(false); to allow some safe level of Entity Expansion // Exists from JDK6. dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true); // And, per Timothy Morgan: "If for some reason support for inline DOCTYPEs are a requirement, then // ensure the entity settings are disabled (as shown above) and beware that SSRF attacks // (http://cwe.mitre.org/data/definitions/918.html) and denial // of service attacks (such as billion laughs or decompression bombs via "jar:") are a risk." // remaining parser logic ... } catch (ParserConfigurationException
+
+// This disables DTDs entirely for that factory xmlInputFactory.setProperty(XMLInputFactory.SUPPORT_DTD, f
+
+// This causes XMLStreamException to be thrown if external DTDs are accessed. xmlInputFactory.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, ""); // disable external entities xmlInputFactory.setProperty("javax.xml.stream.isSupportingExternalEntities", false);
+
+// Extend oracle.xml.parser.v2.XMLParser DOMParser domParser = new DOMParser(); // Do not expand entity references domParser.setAttribute(DOMParser.EXPAND_ENTITYREF, false); // dtdObj is an instance of oracle.xml.parser.v2.DTD domParser.setAttribute(DOMParser.DTD_OBJECT, dtdObj); // Do not allow more than 11 levels of entity expansion domParser.setAttribute(DOMParser.ENTITY_EXPANSION_DEPTH, 12);
+TransformerFactory tf = TransformerFactory.newInstance(); tf.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, ""); tf.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+SchemaFactory factory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema"); factory.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, ""); factory.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, ""); Schema schema = factory.newSchema(); Validator validator = schema.newValidator(); validator.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, ""); validator.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
+SchemaFactory factory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema"); factory.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, ""); factory.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, ""); Schema schema = factory.newSchema(Source);
+SAXTransformerFactory sf = SAXTransformerFactory.newInstance(); sf.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, ""); sf.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, ""); sf.newXMLFilter(Source);
+javax.xml.XMLConstants.ACCESS_EXTERNAL_DTD
+
+javax.xml.XMLConstants.ACCESS_EXTERNAL_SCHEMA
+
+javax.xml.XMLConstants.ACCESS_EXTERNAL_STYLESHEET
+
+XMLReader reader = XMLReaderFactory.createXMLReader(); reader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true); // This may not be strictly required as DTDs shouldn't be allowed at all, per previous line. reader.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false); reader.setFeature("http://xml.org/sax/features/external-general-entities", false); reader.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+
+saxReader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true); saxReader.setFeature("http://xml.org/sax/features/external-general-entities", false); saxReader.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+
+SAXBuilder builder = new SAXBuilder(); builder.setFeature("http://apache.org/xml/features/disallow-doctype-decl",true); Document doc = builder.build(new File(fileName));
+
+SAXBuilder builder = new SAXBuilder(); builder.setFeature("http://xml.org/sax/features/external-general-entities", false); builder.setFeature("http://xml.org/sax/features/external-parameter-entities", false); builder.setExpandEntities(false); Document doc = builder.build(new File(fileName));
+
+public final class NoOpEntityResolver implements EntityResolver { public InputSource resolveEntity(String publicId, String systemId) { return new InputSource(new StringReader("")); } } // ... xmlReader.setEntityResolver(new NoOpEntityResolver()); documentBuilder.setEntityResolver(new NoOpEntityResolver());
+EntityResolver noop = (publicId, systemId) -> new InputSource(new StringReader("")); xmlReader.setEntityResolver(noop); documentBuilder.setEntityResolver(noop);
+
+SAXParserFactory spf = SAXParserFactory.newInstance(); //Option 1: This is the PRIMARY defense against XXE spf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true); spf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true); spf.setXIncludeAware(false); //Option 2: If disabling doctypes is not possible spf.setFeature("http://xml.org/sax/features/external-general-entities", false); spf.setFeature("http://xml.org/sax/features/external-parameter-entities", false); spf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false); spf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true); spf.setXIncludeAware(false); //Do unmarshall operation Source xmlSource = new SAXSource(spf.newSAXParser().getXMLReader(), new InputSource(new StringReader(xml))); JAXBContext jc = JAXBContext.newInstance(Object.class); Unmarshaller um = jc.createUnmarshaller(); um.unmarshal(xmlSource);
+
+DocumentBuilderFactory df = DocumentBuilderFactory.newInstance(); df.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, ""); df.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, ""); DocumentBuilder builder = df.newDocumentBuilder(); String result = new XPathExpression().evaluate( builder.parse( new ByteArrayInputStream(xml.getBytes())) );
+
+java.beans.XMLDecoder¶
+import org.springframework.oxm.Jaxb2Marshaller; import org.springframework.oxm.jaxb.Jaxb2Marshaller; Jaxb2Marshaller marshaller = new Jaxb2Marshaller(); // Must cast return Object to whatever type you are unmarshalling marshaller.unmarshal(new StreamSource(new StringReader(some_string_containing_XML));
+
+static void LoadXML() { string xxePayload = "<!DOCTYPE doc [<!ENTITY win SYSTEM 'file:///C:/Users/testdata2.txt'>]>" + "<doc>&win;</doc>"; string xml = "<?xml version='1.0' ?>" + xxePayload; XmlDocument xmlDoc = new XmlDocument(); // Setting this to NULL disables DTDs - Its NOT null by default. xmlDoc.XmlResolver = null; xmlDoc.LoadXml(xml); Console.WriteLine(xmlDoc.InnerText); Console.ReadLine(); }
+
+XmlTextReader reader = new XmlTextReader(stream); // NEEDED because the default is FALSE!! reader.ProhibitDtd = true; 
+
+XmlTextReader reader = new XmlTextReader(stream); // NEEDED because the default is Parse!! reader.DtdProcessing = DtdProcessing.Prohibit; 
+
+XmlReader reader = XmlReader.Create("example.xml"); XPathDocument doc = new XPathDocument(reader); XPathNavigator nav = doc.CreateNavigator(); string xml = nav.InnerXml.ToString();
+
+NSXMLNodeLoadExternalEntitiesNever
+
+libxml_set_external_entity_loader(null);
